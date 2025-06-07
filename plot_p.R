@@ -2,17 +2,18 @@
 rm(list = ls()); gc(reset = TRUE)
 library(reshape2)
 library(ggplot2)
-library(ggpmisc)
+# library(ggpmisc)
 
 # path <- "D:\\ising-L0"
 # path <- "~/splicing-ising/code-simulate/0516"
-path <- "/Users/zhujin/splicing-ising/code-simulate/0910/result_p"
+# path <- "/Users/zhujin/splicing-ising/code-simulate/0910/result_p"
+path <- "C:/Users/ZHUJ68/SLIDE/"
 setwd(path)
 
-method_list <- c("RPLE_thres", "nodewise_logistic_gic2")
+# method_list <- c("RPLE_thres", "nodewise_logistic_gic2")
 # method_list <- c("RPLE_thres")
 # method_list <- c("RPLE_thres", "logRISE_thres")
-# method_list <- c("nodewise_logistic_gic2")
+method_list <- c("nodewise_logistic_gic2")
 
 case_list <- 2
 # case_list <- c(1, 2)
@@ -27,8 +28,9 @@ for (case in case_list) {
     # p_list <- (3:7)^2
     # p_list <- 3 * (3:16)
     
-    alpha_list <- beta_list <- 0.5
-    p_list <- (3:9)^2
+    alpha_list <- beta_list <- 0.4
+    # p_list <- (3:9)^2
+    p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44)
     
     type <- 10
   } else {
@@ -44,12 +46,16 @@ for (case in case_list) {
     # alpha_list <- beta_list <- 0.85
     # p_list <- (1:10) * 8
     
-    alpha_list <- beta_list <- 1.0
+    alpha_list <- 0.3
+    beta_list <- 0.6
+    
+    # alpha_list <- beta_list <- 1.0
     # p_list <- (4:24) * 2
     # p_list <- (2:12) * 4
     # p_list <- seq(8, 48, by = 4)
     # p_list <- seq(8, 48, by = 4)
-    p_list <- seq(10, 46, by = 4)
+    # p_list <- seq(10, 46, by = 4)
+    p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52)
     
     type <- 8
   }
@@ -79,7 +85,7 @@ pdat <- do.call("rbind.data.frame", res)
 
 method_name <- method_list
 method_name <- sapply(strsplit(method_name, split = "_"), function(x) x[[1]])
-method_name[method_name == "nodewise"] <- "SIMPLE"
+method_name[method_name == "nodewise"] <- "SLIDE"
 
 
 if (length(case_list) > 1) {

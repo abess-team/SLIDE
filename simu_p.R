@@ -1,6 +1,7 @@
 rm(list = ls()); gc(reset = TRUE)
 args <- commandArgs(trailingOnly = TRUE)
-path <- "/Users/zhujin/splicing-ising/code-simulate/large-scale"
+# path <- "/Users/zhujin/splicing-ising/code-simulate/large-scale"
+path <- "C:/Users/ZHUJ68/SLIDE"
 # path <- "D:/ising-L0"
 setwd(path)
 source("method_implementation.R")
@@ -9,7 +10,7 @@ source("simulation_main.R")
 
 nrep <- 45
 isparallel <- TRUE
-ncore <- 5
+ncore <- 9
 save <- FALSE
 # 只能一个 method!!!!!
 # method <- c("RPLE_thres")
@@ -22,17 +23,21 @@ method <- c("nodewise_logistic_gic2")
 n_max <- 1e9
 
 # 除了type以外，一次只能跑一个维数 不然n_start出问题
-type_list <- c(10)
+type_list <- c(8)
 
 if (type_list %in% c(10)) {
-  p_list <- c(8, 16, 24, 32, 40, 48, 56)
+  # 4NN
+  # p_list <- c(8, 16, 24, 32, 40, 48, 56)
+  p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44)  ## previouse 8, 12, 16, 20, 24, 28, 32, 36, 
+  n_start <- 100
 } else if (type_list %in% c(8)) {
-  p_list <- c(9, 16, 25, 36, 49, 64)
+  # RRG
+  p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76)
+  n_start <- 800
 }
-omega <- 0.9
+omega <- 1.5
 degree_list <- c(3)
 alpha_list <- 0.3
-n_start <- 10000
 third_order <- TRUE
 beta_list <- (omega - alpha_list) / (degree_list - 1)
 
@@ -113,13 +118,18 @@ for(type in type_list) {
       print(paste0("Sample size = ", n_temp, ";  Recovery prop = ", prop))
       
       if(prop == 1) {
-        n_start_inner <- round(n_temp * 1.005)
+        n_start_inner <- n_temp + 1
         # n_start_inner <- round(n_temp * 0.4)
         # n_start_inner <- n_temp
         print(paste0("Sufficient size for config ", info, " = ", n_temp))
         break
       } 
-      n_temp <- round(n_temp * (2.0 - prop))
+      if (type == 10) {
+        n_temp <- n_temp + max(round(4096 / (n_temp + 1)), 1)
+      } else if (type == 8) {
+        n_temp <- n_temp + max(round(16384 / (n_temp + 1)), 1)
+      }
+      
       k <- k + 1
     }
     if(n_temp > n_max) {
