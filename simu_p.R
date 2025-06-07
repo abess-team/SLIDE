@@ -1,8 +1,8 @@
 rm(list = ls()); gc(reset = TRUE)
 args <- commandArgs(trailingOnly = TRUE)
 # path <- "/Users/zhujin/splicing-ising/code-simulate/large-scale"
-path <- "C:/Users/ZHUJ68/SLIDE"
-# path <- "D:/ising-L0"
+# path <- "C:/Users/ZHUJ68/SLIDE"
+path <- "/root/autodl-tmp/SLIDE"
 setwd(path)
 source("method_implementation.R")
 source("evaluation.R")
@@ -22,7 +22,7 @@ for (arg in args) {
 
 nrep <- 45
 isparallel <- TRUE
-ncore <- 5
+ncore <- 45
 save <- FALSE
 
 # code 里的n都是训练集大小 画图时要 * 2
@@ -32,16 +32,27 @@ n_max <- 1e9
 
 if (type_list %in% c(10)) {
   # 4NN
-  # p_list <- c(8, 16, 24, 32, 40, 48, 56)
-  p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44)  ## previouse 8, 12, 16, 20, 24, 28, 32, 36, 
-  n_start <- 100
+  # p_list <- c(9, 16, 25, 36, 49, 64, 81, 100, 121, 144)
+  p_list <- c(100, 121, 144)
+  if (method == 'nodewise_logistic_gic2') {
+    # n_start <- 800
+    n_start = 1674
+  }
+  degree_list <- c(4)
 } else if (type_list %in% c(8)) {
   # RRG
-  p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76)
-  n_start <- 800
+  # p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76)
+  p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52)
+  if (method == 'nodewise_logistic_gic2') {
+    n_start <- 800
+  } else if (method == "RPLE_thres") {
+    n_start <- 10000
+  } else if (method == "logRISE_thres") {
+    n_start <- 10000
+  }
+  degree_list <- c(3)
 }
 omega <- 1.5
-degree_list <- c(3)
 alpha_list <- 0.3
 third_order <- TRUE
 beta_list <- (omega - alpha_list) / (degree_list - 1)
@@ -130,9 +141,17 @@ for(type in type_list) {
         break
       } 
       if (type == 10) {
-        n_temp <- n_temp + max(round(4096 / (n_temp + 1)), 1)
+        if (method == 'nodewise_logistic_gic2') {
+          n_temp <- n_temp + max(round(65536 / (n_temp + 1)), 1)
+        } else if (method %in% c('RPLE_thres', "logRISE_thres")) {
+          n_temp <- n_temp + max(round(26214400 / (n_temp + 1)), 1)
+        }
       } else if (type == 8) {
-        n_temp <- n_temp + max(round(16384 / (n_temp + 1)), 1)
+        if (method == 'nodewise_logistic_gic2') {
+          n_temp <- n_temp + max(round(16384 / (n_temp + 1)), 1)
+        } else if (method %in% c('RPLE_thres', "logRISE_thres")) {
+          n_temp <- n_temp + max(round(26214400 / (n_temp + 1)), 1)
+        }
       }
       
       k <- k + 1
