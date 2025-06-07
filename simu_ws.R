@@ -1,28 +1,34 @@
 rm(list = ls()); gc(reset = TRUE)
 args <- commandArgs(trailingOnly = TRUE)
-path <- "/Users/zhujin/splicing-ising/code-simulate/large-scale"
+path <- "/root/autodl-tmp/SLIDE"
+# path <- "/Users/zhujin/splicing-ising/code-simulate/large-scale"
 # path <- "D:/ising-L0"
 setwd(path)
 source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
 
+type_list <- c(8)
+method <- c("nodewise_logistic_gic2")
+
+for (arg in args) {
+  if (grepl("^--type=", arg)) {
+    type_list <- as.integer(sub("^--type=", "", arg))
+  }
+  if (grepl("^--method=", arg)) {
+    method <- sub("^--method=", "", arg)
+  }
+}
+
 nrep <- 45
 isparallel <- TRUE
 ncore <- 5
 save <- FALSE
-# 只能一个 method!!!!!
-# method <- c("RPLE_thres")
-# method <- c("ELASSO_thres")
-method <- c("nodewise_logistic_gic2")
-# method <- c("logRISE_thres")
-# method <- args[1]
 
 # code 里的n都是训练集大小 画图时要 * 2
 n_max <- 1e9
 
 # 除了type以外，一次只能跑一个维数 不然n_start出问题
-type_list <- c(10)
 p_list <- c(16)
 omega <- 2.0
 degree_list <- c(3)
