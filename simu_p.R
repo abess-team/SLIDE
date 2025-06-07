@@ -8,22 +8,27 @@ source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
 
+type_list <- c(8)
+method <- c("nodewise_logistic_gic2")
+
+for (arg in args) {
+  if (grepl("^--type=", arg)) {
+    type_list <- as.integer(sub("^--type=", "", arg))
+  }
+  if (grepl("^--method=", arg)) {
+    method <- sub("^--method=", "", arg)
+  }
+}
+
 nrep <- 45
 isparallel <- TRUE
-ncore <- 9
+ncore <- 5
 save <- FALSE
-# 只能一个 method!!!!!
-# method <- c("RPLE_thres")
-# method <- c("ELASSO_thres")
-method <- c("nodewise_logistic_gic2")
-# method <- c("logRISE_thres")
-# method <- args[1]
 
 # code 里的n都是训练集大小 画图时要 * 2
 n_max <- 1e9
 
 # 除了type以外，一次只能跑一个维数 不然n_start出问题
-type_list <- c(8)
 
 if (type_list %in% c(10)) {
   # 4NN
