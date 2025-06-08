@@ -32,8 +32,7 @@ n_max <- 1e9
 
 if (type_list %in% c(10)) {
   # 4NN
-  # p_list <- c(9, 16, 25, 36, 49, 64, 81, 100, 121, 144)
-  p_list <- c(100, 121, 144)
+  p_list <- c(9, 16, 25, 36, 49, 64, 81, 100, 121, 144)
   if (method == 'nodewise_logistic_gic2') {
     # n_start <- 800
     n_start = 1674
@@ -41,7 +40,6 @@ if (type_list %in% c(10)) {
   degree_list <- c(4)
 } else if (type_list %in% c(8)) {
   # RRG
-  # p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76)
   p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52)
   if (method == 'nodewise_logistic_gic2') {
     n_start <- 800
