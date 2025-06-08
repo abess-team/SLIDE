@@ -22,20 +22,24 @@ for (arg in args) {
 
 nrep <- 45
 isparallel <- TRUE
-ncore <- 5
+ncore <- 45
 save <- FALSE
 
 # code 里的n都是训练集大小 画图时要 * 2
 n_max <- 1e9
-
-# 除了type以外，一次只能跑一个维数 不然n_start出问题
-p_list <- c(16)
-omega <- 2.0
-degree_list <- c(3)
-alpha_list <- (18:7) / 20
-n_start <- 10000
-third_order <- TRUE
-beta_list <- (omega - alpha_list) / (degree_list - 1)
+n_start <- 1000
+p_list <- 16
+if (type_list ==8) {
+  omega <- 2.0
+  degree_list <- c(3)
+  alpha_list <- seq(30, 9, length=8) / 50
+  beta_list <- (omega - alpha_list) / (degree_list - 1)
+} else if (type_list == 10) {
+  omega <- 0.9
+  degree_list <- c(4)
+  alpha_list <-3 * (seq(30, 3, length=10) / 400)
+  beta_list <- (omega - alpha_list) / (degree_list - 1)
+}
 
 result_file <- "/result_ws/"
 

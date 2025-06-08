@@ -34,19 +34,20 @@ if (type_list %in% c(10)) {
   # 4NN
   p_list <- c(9, 16, 25, 36, 49, 64, 81, 100, 121, 144)
   if (method == 'nodewise_logistic_gic2') {
-    # n_start <- 800
-    n_start = 1674
+    n_start <- 1674
+  } else if (method %in% c('RPLE_thres', 'RISE_thres', "logRISE_thres")) {
+    n_start <- 800
+  } else if (method == "ELASSO_thres") {
+    n_start <- 2500
   }
   degree_list <- c(4)
 } else if (type_list %in% c(8)) {
   # RRG
   p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52)
-  if (method == 'nodewise_logistic_gic2') {
+  if (method %in% c('nodewise_logistic_gic2', 'RPLE_thres', 'RISE_thres', "logRISE_thres")) {
     n_start <- 800
-  } else if (method == "RPLE_thres") {
-    n_start <- 10000
-  } else if (method == "logRISE_thres") {
-    n_start <- 10000
+  } else if (method == "ELASSO_thres") {
+    n_start <- 1800
   }
   degree_list <- c(3)
 }
@@ -139,17 +140,9 @@ for(type in type_list) {
         break
       } 
       if (type == 10) {
-        if (method == 'nodewise_logistic_gic2') {
-          n_temp <- n_temp + max(round(65536 / (n_temp + 1)), 1)
-        } else if (method %in% c('RPLE_thres', "logRISE_thres")) {
-          n_temp <- n_temp + max(round(26214400 / (n_temp + 1)), 1)
-        }
+        n_temp <- n_temp + max(round(65536 / (n_temp + 1)), 1)
       } else if (type == 8) {
-        if (method == 'nodewise_logistic_gic2') {
-          n_temp <- n_temp + max(round(16384 / (n_temp + 1)), 1)
-        } else if (method %in% c('RPLE_thres', "logRISE_thres")) {
-          n_temp <- n_temp + max(round(26214400 / (n_temp + 1)), 1)
-        }
+        n_temp <- n_temp + max(round(16384 / (n_temp + 1)), 1)
       }
       
       k <- k + 1
