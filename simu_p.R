@@ -32,7 +32,8 @@ n_max <- 1e9
 
 if (type_list %in% c(10)) {
   # 4NN
-  p_list <- c(9, 16, 25, 36, 49, 64, 81, 100, 121, 144)
+  # p_list <- c(9, 16, 25, 36, 49, 64, 81, 100, 121, 144)
+    p_list <- c(9, 16, 25, 36, 49, 64, 81, 100)
   if (method == 'nodewise_logistic_gic2') {
     n_start <- 1674
   } else if (method %in% c('RPLE_thres', 'RISE_thres', "logRISE_thres")) {
