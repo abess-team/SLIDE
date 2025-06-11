@@ -1,0 +1,9 @@
+"","n_10100"
+"RPLE_thres.TPR",1
+"RPLE_thres.FPR",0
+"RPLE_thres.MCC",1
+"RPLE_thres.loss_op",0.131050842971422
+"RPLE_thres.loss_l1",0.179137318587497
+"RPLE_thres.loss_F",0.296456168349818
+"RPLE_thres.prop",1
+"RPLE_thres.mse",0.000329114993473675

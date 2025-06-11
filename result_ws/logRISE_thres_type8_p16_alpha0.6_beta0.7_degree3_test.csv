@@ -1,0 +1,9 @@
+"","n_1000"
+"logRISE_thres.TPR",1
+"logRISE_thres.FPR",0
+"logRISE_thres.MCC",1
+"logRISE_thres.loss_op",0.240951482674429
+"logRISE_thres.loss_l1",0.3317232730903
+"logRISE_thres.loss_F",0.533716925626953
+"logRISE_thres.prop",1
+"logRISE_thres.mse",0.00108205003191565
