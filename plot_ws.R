@@ -6,14 +6,15 @@ library(ggpmisc)
 
 # path <- "D:\\ising-L0"
 # path <- "~/splicing-ising/code-simulate/0516"
-# path <- "/Users/zhujin/splicing-ising/code-simulate/0910/result_p"
-path <- "C:/Users/ZHUJ68/SLIDE/result_ws/"
+path <- "/Users/zhujin/splicing-ising/code-simulate/0910/result_ws"
+# path <- "C:/Users/ZHUJ68/SLIDE/result_ws/"
 setwd(path)
 
-# method_list <- c("RPLE_thres", "nodewise_logistic_gic2")
+# method_list <- c("nodewise_logistic_gic2")
 # method_list <- c("RPLE_thres")
 # method_list <- c("RPLE_thres", "logRISE_thres")
-method_list <- c("nodewise_logistic_gic2")
+method_list <- c("RPLE_thres", "ELASSO_thres",
+                 "RISE_thres", "logRISE_thres", "nodewise_logistic_gic2")
 
 p_list <- c(16)
 # case_list <- 1
@@ -71,13 +72,14 @@ if (length(case_list) > 1) {
   data_melt[["type"]] <- ifelse(data_melt[["type"]] == 8, 
                                 "Random regular graph", 
                                 "Square lattice")
-  
+  formula <- y ~ x + I(x^2)
   p <- ggplot(data = data_melt, aes(x = 1 / alpha, y = n, group = Method)) + 
     facet_wrap(type ~ ., ncol = 2, scales = "free") + 
     geom_point(aes(color = Method, shape = Method), size = 2)+
-    geom_smooth(aes(color = Method), se = FALSE, 
-                formula = y ~ I(x^2) + x, method = "lm") + 
-    xlab(expression(italic(alpha)))+
+    stat_poly_line(aes(color = Method), formula = formula, se = FALSE) + 
+    stat_poly_eq(aes(color = Method, label = after_stat(eq.label)), 
+                 formula = formula) + 
+    xlab(expression(italic(lambda^{-1})))+
     ylab("Optimal sample size")+
     scale_color_discrete(name = "Methods") +
     scale_shape_discrete(name = "Methods") + 
@@ -85,8 +87,8 @@ if (length(case_list) > 1) {
     theme(legend.position = "bottom", 
           legend.box.margin = margin(-12, 0, -10, 0))
   p
-  ggsave(p, filename = sprintf("p_sc.png", type), width = 8, height = 3)  
-  ggsave(p, filename = sprintf("p_sc.pdf", type), width = 8, height = 3)  
+  ggsave(p, filename = sprintf("ws.png", type), width = 8, height = 4)  
+  ggsave(p, filename = sprintf("ws.pdf", type), width = 8, height = 4)  
 } else {
   data <- data.frame(t(n_matrix))
   colnames(data) <- method_name
@@ -104,7 +106,7 @@ if (length(case_list) > 1) {
     scale_shape_discrete(name = "methods")
   p
   
-  ggsave(p, filename = sprintf("p_type%s.pdf", type), width = 8, height = 4)  
+  ggsave(p, filename = sprintf("ws_type%s.pdf", type), width = 8, height = 4)  
 }
 
 
