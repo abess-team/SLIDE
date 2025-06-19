@@ -32,14 +32,13 @@ n_max <- 1e9
 
 if (type_list %in% c(10)) {
   # 4NN
-  # p_list <- c(9, 16, 25, 36, 49, 64, 81, 100, 121, 144)
     p_list <- c(9, 16, 25, 36, 49, 64, 81, 100)
   if (method == 'nodewise_logistic_gic2') {
     n_start <- 1674
   } else if (method %in% c('RPLE_thres', 'RISE_thres', "logRISE_thres")) {
     n_start <- 800
   } else if (method == "ELASSO_thres") {
-    n_start <- 2500
+    n_start <- 1000
   }
   degree_list <- c(4)
 } else if (type_list %in% c(8)) {
@@ -140,10 +139,14 @@ for(type in type_list) {
         print(paste0("Sufficient size for config ", info, " = ", n_temp))
         break
       } 
+      n_increase_scale <- 1
+      if (method == "ELASSO_thres") {
+        n_increase_scale <- 4
+      }
       if (type == 10) {
-        n_temp <- n_temp + max(round(65536 / (n_temp + 1)), 1)
+        n_temp <- n_temp + max(round(n_increase_scale * 65536 / (n_temp + 1)), 1)
       } else if (type == 8) {
-        n_temp <- n_temp + max(round(16384 / (n_temp + 1)), 1)
+        n_temp <- n_temp + max(round(n_increase_scale * 16384 / (n_temp + 1)), 1)
       }
       
       k <- k + 1
