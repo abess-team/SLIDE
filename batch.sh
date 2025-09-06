@@ -1,9 +1,45 @@
+Rscript simu_p.R  --method="nodewise_logistic_gic2" --case=0
+Rscript simu_p.R  --method="RPLE_thres" --case=0
+Rscript simu_p.R  --method="logRISE_thres" --case=0
+Rscript simu_p.R  --method="RISE_thres" --case=0
+Rscript simu_p.R  --method="ELASSO_thres" --case=0
+Rscript simu_p.R --method="nodewise_logistic_gic2" --case=1
+Rscript simu_p.R --method="RPLE_thres" --case=1
+Rscript simu_p.R --method="logRISE_thres" --case=1
+Rscript simu_p.R --method="RISE_thres" --case=1
+Rscript simu_p.R --method="ELASSO_thres" --case=1
+
+Rscript simu_beta.R --type=8 --method="nodewise_logistic_gic2"
+Rscript simu_beta.R --type=8 --method="RPLE_thres"
+Rscript simu_beta.R --type=8 --method="RISE_thres"
+Rscript simu_beta.R --type=8 --method="logRISE_thres"
+Rscript simu_beta.R --type=8 --method="ELASSO_thres"
+Rscript simu_beta.R --type=9 --method="nodewise_logistic_gic2"
+Rscript simu_beta.R --type=9 --method="RPLE_thres"
+Rscript simu_beta.R --type=9 --method="RISE_thres"
+Rscript simu_beta.R --type=9 --method="logRISE_thres"
+Rscript simu_beta.R --type=9 --method="ELASSO_thres"
+Rscript simu_beta.R --type=10 --method="nodewise_logistic_gic2"
+Rscript simu_beta.R --type=10 --method="RPLE_thres"
+Rscript simu_beta.R --type=10 --method="RISE_thres"
+Rscript simu_beta.R --type=10 --method="logRISE_thres"
+Rscript simu_beta.R --type=10 --method="ELASSO_thres"
+Rscript simu_beta.R --type=11 --method="nodewise_logistic_gic2"
+Rscript simu_beta.R --type=11 --method="RPLE_thres"
+Rscript simu_beta.R --type=11 --method="RISE_thres"
+Rscript simu_beta.R --type=11 --method="logRISE_thres"
+Rscript simu_beta.R --type=11 --method="ELASSO_thres"
+Rscript simu_beta.R --type=12 --method="nodewise_logistic_gic2"
+Rscript simu_beta.R --type=12 --method="RPLE_thres"
+Rscript simu_beta.R --type=12 --method="RISE_thres"
+Rscript simu_beta.R --type=12 --method="logRISE_thres"
+Rscript simu_beta.R --type=12 --method="ELASSO_thres"
+
 Rscript simu_ws.R --type=8 --method="nodewise_logistic_gic2"
 Rscript simu_ws.R --type=8 --method="RPLE_thres"
 Rscript simu_ws.R --type=8 --method="RISE_thres"
 Rscript simu_ws.R --type=8 --method="logRISE_thres"
 Rscript simu_ws.R --type=8 --method="ELASSO_thres"
-
 Rscript simu_ws.R --type=10 --method="nodewise_logistic_gic2"
 Rscript simu_ws.R --type=10 --method="RPLE_thres"
 Rscript simu_ws.R --type=10 --method="RISE_thres"
@@ -15,7 +51,6 @@ Rscript simu_p.R --type=8 --method="RPLE_thres"
 Rscript simu_p.R --type=8 --method="logRISE_thres"
 Rscript simu_p.R --type=8 --method="RISE_thres"
 Rscript simu_p.R --type=8 --method="ELASSO_thres"
-
 Rscript simu_p.R --type=10 --method="nodewise_logistic_gic2"
 Rscript simu_p.R --type=10 --method="RPLE_thres"
 Rscript simu_p.R --type=10 --method="logRISE_thres"

@@ -1,10 +1,5 @@
 rm(list = ls()); gc(reset = TRUE)
 args <- commandArgs(trailingOnly = TRUE)
-# path <- "D:/huatong/Ising202009/code/split-code/large_scale/"
-# path <- "/public/home/zhujin/Ising_xuanyu/large_scale/"
-path <- "/Users/zhujin/splicing-ising/code-simulate/large-scale"
-# path <- "D:/ising-L0"
-setwd(path)
 library(stringr)
 source("method_implementation.R")
 source("evaluation.R")
@@ -14,7 +9,6 @@ nrep <- 45
 isparallel <- TRUE
 ncore <- 5
 save <- FALSE
-# 只能一个 method!!!!!
 if (length(args) == 0) {
   # method <- c("RPLE_thres")
   # method <- c("nodewise_logistic_gic2")
@@ -26,12 +20,10 @@ if (length(args) == 0) {
   type_list <- as.numeric(args[2])
 }
 
-# 除了type以外，一次只能跑一个维数 不然n_start出问题
 p_list <- c(16)
 alpha_list <- c(0.4)
 degree_list <- c(3)
 
-# code 里的n都是训练集大小 画图时要 * 2
 n_start <- 1e2
 
 if (str_detect(method, "LogRelax")) {
@@ -40,11 +32,6 @@ if (str_detect(method, "LogRelax")) {
   n_max <- 2e9
 }
 
-# if (type_list == 8 || type_list == 10 || type_list == 12) {
-#   beta_list <- (8:20)
-# } else if (type_list == 9 || type_list == 11) {
-#   beta_list <- (8:32)
-# }
 if (type_list == 8) {
   # Type B
   if (degree_list == 3) {
@@ -70,21 +57,6 @@ if (type_list == 8) {
 } else if (type_list == 12) {
   # Type E
   beta_list <- (20:36) / 2
-} else if (type_list == 13) {
-  # Type F
-  # beta_list <- (12:24) / 2
-  beta_list <- (20:32) / 2  # the sample size need by RPLE suddenly grows up (when beta >= 32)
-} else if (type_list == 14) {
-  # 
-  # beta_list <- (22:32) # 5NN-cyc
-  beta_list <- (14:26) # 3-RR glass-weak
-} else if (type_list == 15) {
-  # 
-  n_start <- 5915471
-  beta_list <- 32:36 / 2
-} else if (type_list >= 13) {
-  p_list <- c(18)
-  # alpha_list <- 0.2
 }
 beta_list <- beta_list / 20
 
@@ -168,15 +140,10 @@ for(type in type_list) {
       
       if(prop == 1) {
         n_start_inner <- n_temp
-        # n_start_inner <- round(2 * n_temp / 3)
-        # n_start_inner <- round(n_temp * 0.4)
-        # n_start_inner <- n_temp
         print(paste0("Sufficient size for config ", info, " = ", n_temp))
         break
       } 
       n_temp <- round(n_temp * (2 - prop))
-      # n_temp <- round(n_temp * (2.2 - 1.2 * prop))
-      # n_temp <- round(n_temp * 10)
       k <- k + 1
     }
     if(n_temp > n_max) {

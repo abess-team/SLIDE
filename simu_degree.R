@@ -1,18 +1,5 @@
-## 尝试 3 比较多次项
-# --> 显著，但是系数是负的
-# --> 1. 增大重复次数 (check)
-# --> 2. 换成不同的随机数种子 (hopefully) 
-# --> 2.1 increase p to 20 (almost) but our proposal also close to quadtic...
-# --> 2.2 increase gamma such that the gap of empirical sample complexity enlarges when degree increases
-# --> [x] 2.2 decrease the added samples when enlarging samples (just make this more smooth...)
-
 rm(list = ls()); gc(reset = TRUE)
 args <- commandArgs(trailingOnly = TRUE)
-# path <- "D:/huatong/Ising202009/code/split-code/large_scale/"
-# path <- "/public/home/zhujin/Ising_xuanyu/large_scale/"
-path <- "/Users/zhujin/splicing-ising/code-simulate/large-scale"
-# path <- "D:/ising-L0"
-setwd(path)
 source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
@@ -21,73 +8,33 @@ nrep <- 45
 isparallel <- TRUE
 ncore <- 5
 save <- FALSE
-# 只能一个 method!!!!!
-# method <- c("RPLE_thres")
-method <- c("ELASSO_thres")
-# method <- c("nodewise_logistic_gic2")
-# method <- c("nodewise_logistic_cv")
-# method <- c("logRISE_thres")
-# method <- args[1]
+if (length(args) == 0) {
+  # method <- c("RPLE_thres")
+  # method <- c("nodewise_logistic_gic2")
+  method <- c("ELASSO_thres")
+  type_list <- c(12)
+} else {
+  method <- args[1]
+  case <- as.numeric(args[2])
+  if (case == 0) {
+    third_order <- FALSE
+  } else {
+    third_order <- TRUE
+  }
+}
 
-# code 里的n都是训练集大小 画图时要 * 2
 n_max <- 1e9
-
-# 除了type以外，一次只能跑一个维数 不然n_start出问题
-
-third_order <- FALSE
-
-##### local dense network #####
-type_list <- c(18)
 p_list <- c(16)
 omega <- 2.0
 degree_list <- c(1:14)
 n_start <- 2e1
-third_order <- TRUE
-
-##### much fast (3-order or 4-order. Useless! Just ignore!) #####
-# type_list <- c(16)
-# p_list <- c(24)
-# omega <- 1.5
-# degree_list <- c(1:22)
-# n_start <- 2e1
-# third_order <- TRUE
-
-##### much fast #####
-# type_list <- c(16)
-# p_list <- c(16)
-# omega <- 2.8
-# degree_list <- c(3:12)
-# n_start <- 5e4
-# alpha_list <- c(0.2)
-
-##### slower #####
-# type_list <- c(16)
-# p_list <- c(18)
-# omega <- 3.2
-# degree_list <- c(3:16)
-# n_start <- 5e4
-# alpha_list <- c(0.2)
-
-##### very slow #####
-# type_list <- c(16)
-# p_list <- c(20)
-# omega <- 3.6
-# degree_list <- c(4:18)
-# n_start <- 1e7
-# alpha_list <- c(0.2)
-
-##### much fast #####
-# type_list <- c(17)  ## spin glass is easy to hold (it may because not all of node are homogeneous)
-# p_list <- c(16)
-# omega <- 2.8
-# degree_list <- c(3:14)
-# n_start <- 5e4
-# alpha_list <- c(0.2)
-
 if (third_order) {
+  ##### local dense network #####
+  type_list <- c(18)
   alpha_list <- omega / degree_list
   beta_list <- omega / degree_list
 } else {
+  type_list <- c(10)
   beta_list <- (omega - alpha_list) / (degree_list - 1)
 }
 result_file <- "/result_d/"
@@ -165,8 +112,6 @@ for(type in type_list) {
       
       if(prop == 1) {
         n_start_inner <- round(n_temp * 1.005)
-        # n_start_inner <- round(n_temp * 0.4)
-        # n_start_inner <- n_temp
         print(paste0("Sufficient size for config ", info, " = ", n_temp))
         break
       } 

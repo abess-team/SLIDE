@@ -89,7 +89,6 @@ sim <- function(seed,
     cc <- floor(cc * shrink)
   }
   
-  # c_type = 1的效果更好
   if (is.null(thres)) {
     thres <- alpha / 2
   }
