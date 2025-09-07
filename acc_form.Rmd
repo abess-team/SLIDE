@@ -157,7 +157,19 @@ R version 4.1.2
 Include version numbers (e.g., version numbers for any R or Python packages used)
 -->
 
-The package versions are summarized in `pkg.txt`. 
+The R packages used in our experiments are listed below
+```
+"Package" "Version"
+"numDeriv" "2016.8-1.1"
+"glmnet" "4.1-6"
+"ROI" "1.0-1"
+"CVXR" "1.0-15"
+"ECOSolveR" "0.5.5"
+"Matrix" "1.6-1"
+"foreach" "1.5.2"
+"parallel" "4.1.2"
+"stringr" "1.5.1"
+```
 
 ### Supporting system/hardware requirements (optional)
 
@@ -171,7 +183,7 @@ I conducted experiments on both MacOS and Linux platforms. So, the two platforms
 
 - [ ] No parallel code used
 - [x] Multi-core parallelization on a single machine/node
-    - Number of cores used: 45 cores
+    - Number of cores used: 50 cores
 - [ ] Multi-machine/multi-node parallelization 
     - Number of nodes and cores used: 
 
@@ -201,7 +213,7 @@ The materials provided should provide a straightforward way for reviewers and re
 The provided workflow reproduces:
 
 - [ ] Any numbers provided in text in the paper
-- [ ] The computational method(s) presented in the paper (i.e., code is provided that implements the method(s))
+- [x] The computational method(s) presented in the paper (i.e., code is provided that implements the method(s))
 - [x] All tables and figures in the paper
 - [ ] Selected tables and figures in the paper, as explained and justified below:
 

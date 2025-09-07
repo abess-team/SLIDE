@@ -1,5 +1,5 @@
 rm(list = ls()); gc(reset = TRUE)
-path <- "/Users/zhujin/splicing-ising/code-simulate/code-github"
+path <- "./"
 setwd(path)
 
 library(stringr)
@@ -22,7 +22,7 @@ if (length(args) == 0) {
 
 nrep <- 45
 isparallel <- TRUE
-ncore <- 45
+ncore <- 9
 save <- FALSE
 
 p_list <- c(16)

@@ -1,6 +1,7 @@
 rm(list = ls()); gc(reset = TRUE)
 args <- commandArgs(trailingOnly = TRUE)
-# setwd("/Users/zhujin/splicing-ising/code-simulate/code-github")
+path <- "./"
+setwd(path)
 source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
@@ -9,8 +10,6 @@ isparallel <- TRUE
 ncore <- 45
 save <- FALSE
 if (length(args) == 0) {
-  # method <- c("RPLE_thres")
-  # method <- c("RISE_thres")
   method <- c("SLIDE")
   third_order <- FALSE
 } else {

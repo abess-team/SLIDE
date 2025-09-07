@@ -1,6 +1,5 @@
 rm(list = ls()); gc(reset = TRUE)
-# path <- "/root/autodl-tmp/SLIDE"
-path <- "/Users/zhujin/splicing-ising/code-simulate/code-github"
+path <- "./"
 setwd(path)
 dir_name <- "result_high"
 if (!dir.exists(dir_name)) {

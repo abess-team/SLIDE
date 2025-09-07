@@ -127,13 +127,9 @@ sim <- function(seed, type, n, p, method, alpha = 0.4, beta = NULL, degree = 3, 
   else
     LogRelaxTAlpha_thres <- NULL
   
-  ## new implementation:
-  # train <- train[train[, 1] > 0, ]
-  # valid <- valid[valid[, 1] > 0, ]
   train <- train[, -1]
   valid <- valid[, -1]
   pool_data <- rbind(train, valid)
-  # sample_weight <- pool_data[, 1]
   if ("SLIDE_oracle" %in% method) {
     runtime <- system.time(
       SLIDE_oracle <- slide(pool_data, weight = sample_weight, max.support.size = edge_num_vec, tune.type = "gic", support.size = edge_num_vec)[[1]]
@@ -144,7 +140,7 @@ sim <- function(seed, type, n, p, method, alpha = 0.4, beta = NULL, degree = 3, 
   }
   if ("SLIDE" %in% method) {
     runtime <- system.time(
-      SLIDE <- slide(pool_data, weight = sample_weight, tune.type = "gic", ic.scale = 1, graph.threshold = thres)[[1]]
+      SLIDE <- slide(pool_data, weight = sample_weight, tune.type = "gic", ic.scale = 2, graph.threshold = thres)[[1]]
     )[3]
     diag(SLIDE) <- 0.0
   } else {
