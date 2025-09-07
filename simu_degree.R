@@ -6,11 +6,11 @@ source("evaluation.R")
 source("simulation_main.R")
 nrep <- 45
 isparallel <- TRUE
-ncore <- 5
+ncore <- 45
 save <- FALSE
 if (length(args) == 0) {
   # method <- c("RPLE_thres")
-  # method <- c("SLIDE")
+  # method <- c("RISE_thres")
   method <- c("SLIDE")
   third_order <- FALSE
 } else {
@@ -34,6 +34,7 @@ if (third_order) {
   alpha_list <- omega / degree_list
   beta_list <- omega / degree_list
 } else {
+  ##### random regular graph #####
   n_start <- 5e4
   omega <- 2.8
   type_list <- c(7)

@@ -10,7 +10,8 @@ source("simulation_main.R")
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) == 0) {
   # method <- c("RPLE_thres")
-  # method <- c("SLIDE")
+  # method <- c("RISE_thres")
+  # method <- c("logRISE_thres")
   # method <- c("ELASSO_thres")
   method <- c("SLIDE")
   type_list <- c(1)
@@ -37,20 +38,10 @@ if (str_detect(method, "LogRelax")) {
 
 if (type_list == 1) {
   # Type B
-  if (degree_list == 3) {
-    beta_list <- (14:26)
-  } else if (degree_list == 5) {
-    beta_list <- (20:36) / 2
-  } else if (degree_list == 6) {
-    beta_list <- (16:32) / 2
-  }
+  beta_list <- (14:24)
 } else if (type_list == 2) {
   # Type D
-  if (degree_list == 3) {
-    beta_list <- (20:32)
-  } else {
-    beta_list <- (20:36) / 2
-  }
+  beta_list <- (20:32)
 } else if (type_list == 3) {
   # Type A
   beta_list <- (20:36) / 2
