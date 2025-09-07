@@ -1,22 +1,23 @@
 rm(list = ls()); gc(reset = TRUE)
-args <- commandArgs(trailingOnly = TRUE)
-path <- "/root/autodl-tmp/SLIDE"
-# path <- "/Users/zhujin/splicing-ising/code-simulate/large-scale"
-# path <- "D:/ising-L0"
+# path <- "/root/autodl-tmp/SLIDE"
+path <- "/Users/zhujin/splicing-ising/code-simulate/code-github"
 setwd(path)
 source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
 
-type_list <- c(8)
-method <- c("nodewise_logistic_gic2")
-
-for (arg in args) {
-  if (grepl("^--type=", arg)) {
-    type_list <- as.integer(sub("^--type=", "", arg))
-  }
-  if (grepl("^--method=", arg)) {
-    method <- sub("^--method=", "", arg)
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) == 0) {
+  type_list <- c(1)
+  method <- c("SLIDE")
+} else {
+  for (arg in args) {
+    if (grepl("^--method=", arg)) {
+      method <- sub("^--method=", "", arg)
+    }
+    if (grepl("^--type=", arg)) {
+      type_list <- as.integer(sub("^--type=", "", arg))
+    }
   }
 }
 
@@ -28,13 +29,13 @@ save <- FALSE
 # code 里的n都是训练集大小 画图时要 * 2
 n_max <- 1e9
 p_list <- 16
-if (type_list ==8) {
+if (type_list == 1) {
   n_start <- 200
   omega <- 1.2
   degree_list <- c(3)
   alpha_list <- 2 * seq(90, 9, length=10) / 450
   beta_list <- (omega - alpha_list) / (degree_list - 1)
-} else if (type_list == 10) {
+} else if (type_list == 3) {
   n_start <- 1000
   omega <- 0.9
   degree_list <- c(4)
