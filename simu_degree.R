@@ -1,21 +1,21 @@
 rm(list = ls()); gc(reset = TRUE)
 args <- commandArgs(trailingOnly = TRUE)
+# setwd("/Users/zhujin/splicing-ising/code-simulate/code-github")
 source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
-
 nrep <- 45
 isparallel <- TRUE
 ncore <- 5
 save <- FALSE
 if (length(args) == 0) {
   # method <- c("RPLE_thres")
-  # method <- c("nodewise_logistic_gic2")
-  method <- c("ELASSO_thres")
-  type_list <- c(12)
+  # method <- c("SLIDE")
+  method <- c("SLIDE")
+  third_order <- FALSE
 } else {
-  method <- args[1]
-  case <- as.numeric(args[2])
+  method <- sub("^--method=", "", args[grep("^--method=", args)])
+  case <- as.numeric(sub("^--case=", "", args[grep("^--case=", args)]))
   if (case == 0) {
     third_order <- FALSE
   } else {
@@ -25,16 +25,20 @@ if (length(args) == 0) {
 
 n_max <- 1e9
 p_list <- c(16)
-omega <- 2.0
-degree_list <- c(1:14)
-n_start <- 2e1
 if (third_order) {
   ##### local dense network #####
-  type_list <- c(18)
+  n_start <- 2e1
+  type_list <- c(6)
+  omega <- 2.0
+  degree_list <- c(1:14)
   alpha_list <- omega / degree_list
   beta_list <- omega / degree_list
 } else {
-  type_list <- c(10)
+  n_start <- 5e4
+  omega <- 2.8
+  type_list <- c(7)
+  degree_list <- c(3:4, 6:12)
+  alpha_list <- c(0.2)
   beta_list <- (omega - alpha_list) / (degree_list - 1)
 }
 result_file <- "/result_d/"
@@ -77,8 +81,7 @@ for(type in type_list) {
     n_temp <- n_start_inner
     prop <- 0; k <- 1
     res_summary <- matrix(0, nrow = 1, ncol = 8 * res_num)
-    colnames(res_summary) <- c(t(outer(method_name, rate_name, paste0)), t(outer(method_name, loss_name, paste0)),
-                               paste0(method_name, "prop"), paste0(method_name, "mse"))
+    colnames(res_summary) <- c(t(outer(method_name, rate_name, paste0)), t(outer(method_name, loss_name, paste0)), paste0(method_name, "prop"), paste0(method_name, "mse"))
     seed_scale <- 1
     while(n_temp <= n_max) {
       print(paste0("n_temp: ", n_temp))

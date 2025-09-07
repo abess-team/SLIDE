@@ -29,19 +29,9 @@ get_chisq_stat <- function(conf_mat, freq_vec) {
 }
 
 get_act_set <- function(S, size) {
-  # S_vector <- as.vector(abs(S))
-  # cut_point <- sort(S_vector, decreasing = TRUE)[size + 1]
-  # S[abs(S) <= cut_point] <- 0
-  
   S[rank(abs(S), ties.method = "first") <= (length(S) - size)] <- 0
-  
-  # SS <- S
-  # SS[SS != 0 ] <- 1
-  # print(SS)
-  
   act_set <- which(S != 0, arr.ind = TRUE)
   act_set <- act_set - 1
-  
   return(act_set)
 }
 
@@ -59,126 +49,6 @@ thres_theta <- function(theta, thres = NULL, cluster = NULL) {
     theta <- matrix(theta_vec, p, p)
   }
   return(theta)
-}
-
-# opt_method: 1: line_search = false, 2: line search = true, 3: select the stepsize by hessian 
-# c_type == 1: change immediately, 2: find the act_set that maximize the descent
-splicing_whole <- function(train, valid, lambda = 4, gamma = 0.0, type = NULL, 
-                           cluster = NULL, thres = NULL, cv = FALSE, c_vector, c_type = 1, max_iter = 1000, 
-                           warmstart = TRUE, true_size = NULL, seed = NULL, 
-                           opt_method = 3, inner_alpha = 0.1, inner_beta = 0.5, inner_warmstart = TRUE, save = FALSE) {
-  time_flag <- proc.time()[3][[1]]
-  conf_train <- train[, - 1]
-  conf_valid <- valid[, - 1]
-  
-  freq_vec_valid <- valid[, 1]
-  n_valid <- sum(freq_vec_valid)
-  freq_vec_train <- train[, 1]
-  n_train <- sum(freq_vec_train)
-  
-  p <- ncol(conf_train)
-  S_res <- get_chisq_stat(conf_train, freq_vec_train)
-  S <- S_res[["chisq_matrix"]]
-  # print(paste0("chi-square matrix: "))
-  # print(S)
-  off_diag_num <- S_res[["off_diag_num"]]
-  est_size <- off_diag_num
-  
-  if(!is.null(true_size)) {
-    # s_list <- seq(from = floor(true_size - p^(1/3)), to = ceiling(true_size + p^(1/3)), by = 1)    
-    s_list <- round(seq(from = true_size - 2, to = true_size + 4, by = 1))
-  } else {
-    len <- round(4 * sqrt(p))
-    # gap = 0.5 * sqrt(p)
-    if(type == 1 | type == 5) {
-      s_list <- round(seq(from = 1, to = 2 * p, length.out = len))
-    } else if(type == 3) {
-      s_list <- round(seq(from = round(0.8 * p), to = 3 * p, length.out = len))
-    } else if(type == 4) {
-      s_list <- round(seq(from = 2 * p, to = round(4.3 * p), length.out = len))
-    }
-  }
-  if(!cv) {s_list <- true_size}
-  
-  print(paste0("size list: ", paste0(s_list, collapse = " ")))
-  
-  valid_loss <- c()
-  theta_hat <- list()
-  theta_hat[[1]] <- matrix(0, p, p)
-  
-  if(!cv) {
-    # eps <- 1e-2 / (n_train ^ (1 / 2))
-    eps <- min(0.1 / n_train, 1e-5)
-  } else {
-    eps <- min(0.1 / n_train, 1e-5)
-  }
-  
-  inner_eps <- 0.1 * eps
-  # temp <- 10 * (beta - 0.5)
-  # lambda <- min(4 * sqrt(2) ^ temp, 32)
-  print(paste0("eps: ", eps, "   inner_eps: ", inner_eps, "   lambda: ", lambda))
-  
-  if(length(s_list) > 1) {
-    valid_loss <- c()
-    for(i in 1: length(s_list)) {
-      s <- s_list[i]
-      print(paste0("current size: ", s))
-      act_set <- get_act_set(S, s)
-      
-      # 这个warmstart不太有用
-      # if(warmstart) {ini_mat <- theta_hat[[i]]} else {ini_mat <- theta_hat[[1]]}
-      ini_mat <- theta_hat[[1]]
-      
-      theta_hat[[i + 1]] <- IsingL0_inner(conf_train, freq_vec_train, n_train, ini_mat, act_set,
-                                          c_vector = c_vector, c_type = c_type, opt_method = opt_method, 
-                                          inner_warmstart = inner_warmstart, eps = eps, inner_eps = inner_eps, 
-                                          lambda = lambda, gamma = gamma, alpha = inner_alpha, beta = inner_beta)
-      
-      exp_odd <- compute_exp_odd(conf_valid, theta_hat[[i + 1]])
-      valid_loss[i] <- - compute_log_likelihood(conf_valid, freq_vec_valid, n_valid,  
-                                                theta_hat[[i + 1]], exp_odd, gamma = 0)
-      print(paste0("current valid loss: ", valid_loss[i]))
-    }
-    names(valid_loss) <- s_list
-    print(paste0("valid loss list: ", paste0(valid_loss, collapse = " ")))
-    ind <- which.min(valid_loss)
-    print(valid_loss - valid_loss[ind], digits = 14)
-    print("minimal difference: ")
-    print(min(valid_loss[- ind] - valid_loss[ind]), digits = 14)
-  } else {
-    ind <- 1
-  }
-  
-  s.opt <- s_list[ind]
-  print(paste0("optimal size: ", s.opt))
-  act_set <- get_act_set(S, s.opt)
-  
-  # act_set <- as.matrix(read.csv("out.csv", header = FALSE))
-  # print("initial act_set: ")
-  # print(act_set)
-  
-  # if(!warmstart | length(s_list) == 1) ind <- 0
-  if(length(s_list) == 1) ind <- 0
-  freq_vec_all <- c(freq_vec_train, freq_vec_valid)
-  conf_mat <- rbind(conf_train, conf_valid)
-  n_all <- n_train + n_valid
-  theta <- IsingL0_inner(conf_mat, freq_vec_all, n_all, theta_hat[[ind + 1]], act_set,
-                         c_vector = c_vector, c_type = c_type, opt_method = opt_method, 
-                         inner_warmstart = inner_warmstart, eps = eps, inner_eps = inner_eps, 
-                         lambda = lambda, gamma = gamma, alpha = inner_alpha, beta = inner_beta)
-  
-  exp_odd <- compute_exp_odd(conf_mat, theta)
-  final_loss <- - compute_log_likelihood(conf_mat, freq_vec_all, n_all, theta, exp_odd, gamma = 0)
-  print(paste0("final total loss: ", final_loss))
-  
-  theta_est <- thres_theta(theta = theta, thres = thres, cluster = cluster)
-  
-  if(save) {
-    write.csv(theta_est, paste0(path, result_file, method, "_type", type, "_p", p, "_alpha", 
-                                alpha, "_beta", beta, "_n", n_train, "_", mark, "_theta_est.csv"))
-  }
-  print(paste0("time for splicing:", proc.time()[3][[1]] - time_flag, ' s'))
-  return(theta = theta_est)
 }
 
 sym_theta <- function(theta, method) {
@@ -256,19 +126,6 @@ ISO <- function(train, valid, c_list = 0.2, thres = NULL, cluster = NULL,
         valid_loss <- rep(0, length(lambda_list))
         for(ind_lam in 1: length(lambda_list)) {
           lambda <- lambda_list[ind_lam]
-          
-          # if(method == "RPLE") {
-            # X_temp <- X
-            # if (magnetic) {
-            #   X_temp <- X_temp[, -1]
-            # }
-            # model_node <- glmnet(x = X_temp, y = Y, family = "binomial", weights = freq_vec, 
-            #                      alpha = 1, lambda = lambda, intercept = FALSE, thresh = 1e-9)
-            # thetai_est <- as.vector(model_node$beta) / 2
-            # if (magnetic) {
-            #   thetai_est <- as.vector(coef(model_node)) / 2
-            # }
-          # } else if (method == "RPLE" | method == "RISE" | method == "logRISE")
           if (method == "RPLE" | method == "RISE" | method == "logRISE") 
           {
             objective <- OP(F_objective(wrapper, n =  var_num),
@@ -327,18 +184,6 @@ ISO <- function(train, valid, c_list = 0.2, thres = NULL, cluster = NULL,
     Y <- conf_all[, i]
     
     if (min(table(Y)) > 1) {
-      # if(method == "RPLE") {
-        # X_temp <- X
-        # if (magnetic) {
-        #   X_temp <- X_temp[, -1]
-        # }
-        # model_node <- glmnet(x = X_temp, y = Y, family = "binomial", weights = freq_vec, 
-        #                      alpha = 1, lambda = lambda, intercept = FALSE, thresh = 1e-9)
-        # theta_est[i, - i] <- as.vector(model_node$beta) / 2
-        # if (magnetic) {
-        #   theta_est[i, i] <- as.vector(coef(model_node))[1] / 2
-        # }
-      # } else if (method == "RPLE" | method == "RISE" | method == "logRISE") {
       if (method == "RPLE" | method == "RISE" | method == "logRISE") {
         objective <- OP(F_objective(wrapper, n =  var_num),
                         bounds = V_bound(ld = -Inf, nobj = var_num))
@@ -525,14 +370,7 @@ LogRelax <- function(train, valid, alpha=0.05, theory_alpha=FALSE,
   compute_S <- function(conf_all, freq_vec_all, mu_bar) {
     conf_all_centered <- sweep(conf_all, 2, mu_bar)
     freq_vec_all <- freq_vec_all / sum(freq_vec_all)
-    
-    # the line is equal to S implemented with for-loop
     S <- t(conf_all_centered) %*% diag(freq_vec_all) %*% conf_all_centered
-    
-    # S <- matrix(0.0, p, p)
-    # for (i in 1:nrow(conf_all_centered)) {
-    #   S <- S + freq_vec_all[i] * as.matrix(conf_all_centered[i, ]) %*% t(conf_all_centered[i, ])
-    # }
     return(S)
   }
   S <- compute_S(conf_all, freq_vec_all, mu_bar)
@@ -549,27 +387,11 @@ LogRelax <- function(train, valid, alpha=0.05, theory_alpha=FALSE,
   result <- solve(prob, solver = "SCS")
   W <- result$getValue(W)
   
-  ## By ROI
-  # obj <- function(W) {
-  #   drop(log(det(W)))
-  # }
-  # objective <- OP(F_objective(obj),
-  #                 bounds = V_bound(ld = -Inf, nobj = var_num))
-  # solve_temp <- tryCatch({
-  #   ROI_solve(objective, solver = "nlminb", start = rep(0, var_num),
-  #             control = list(eval.max = 1000, iter.max = 1000))$solution
-  # }, error = function(err) {
-  #   rep(0, var_num)
-  # })
-  # solve_temp[is.na(solve_temp)] <- 0.0
-  
   theta_est <- - solve(W)
   diag(theta_est) <- mu_bar
   if (!magnetic) {
     diag(theta_est) <- 0.0
   }
-  # theta_est[abs(theta_est) <= 1e-4] <- 0.0
-  # print(round(theta_est, digits = 2))
   if(save) {
     write.csv(theta_est, paste0(path, result_file, method, "_type", type, "_p", p, "_alpha", 
                                 alpha, "_beta", beta, "_n", n_all / 2, "_", mark, "_theta_origin.csv"))
@@ -584,7 +406,6 @@ LogRelax <- function(train, valid, alpha=0.05, theory_alpha=FALSE,
     write.csv(theta_est, paste0(path, result_file, method, "_type", type, "_p", p, "_alpha", 
                                 alpha, "_beta", beta, "_n", n_all / 2, "_", mark, "_theta_est.csv"))
   }
-  # print(round(theta_est, digits = 2))
   return(theta_est)
 }
 

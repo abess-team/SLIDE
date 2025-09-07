@@ -1,28 +1,29 @@
 rm(list = ls()); gc(reset = TRUE)
-args <- commandArgs(trailingOnly = TRUE)
-# path <- "/Users/zhujin/splicing-ising/code-simulate/large-scale"
-# path <- "C:/Users/ZHUJ68/SLIDE"
 path <- "/root/autodl-tmp/SLIDE"
+path <- "/Users/zhujin/splicing-ising/code-simulate/code-github"
 setwd(path)
 source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
 
-type_list <- c(8)
-method <- c("nodewise_logistic_gic2")
-
-for (arg in args) {
-  if (grepl("^--type=", arg)) {
-    type_list <- as.integer(sub("^--type=", "", arg))
-  }
-  if (grepl("^--method=", arg)) {
-    method <- sub("^--method=", "", arg)
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) == 0) {
+  type_list <- c(1)
+  method <- c("SLIDE")
+} else {
+  for (arg in args) {
+    if (grepl("^--type=", arg)) {
+      type_list <- as.integer(sub("^--type=", "", arg))
+    }
+    if (grepl("^--method=", arg)) {
+      method <- sub("^--method=", "", arg)
+    }
   }
 }
 
 nrep <- 45
 isparallel <- TRUE
-ncore <- 45
+ncore <- 5
 save <- FALSE
 
 # code 里的n都是训练集大小 画图时要 * 2
@@ -30,10 +31,10 @@ n_max <- 1e9
 
 # 除了type以外，一次只能跑一个维数 不然n_start出问题
 
-if (type_list %in% c(10)) {
+if (type_list %in% c(3)) {
   # 4NN
     p_list <- c(9, 16, 25, 36, 49, 64, 81, 100)
-  if (method == 'nodewise_logistic_gic2') {
+  if (method == 'SLIDE') {
     n_start <- 1674
   } else if (method %in% c('RPLE_thres', 'RISE_thres', "logRISE_thres")) {
     n_start <- 800
@@ -41,10 +42,10 @@ if (type_list %in% c(10)) {
     n_start <- 1000
   }
   degree_list <- c(4)
-} else if (type_list %in% c(8)) {
+} else if (type_list %in% c(1)) {
   # RRG
   p_list <- c(8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52)
-  if (method %in% c('nodewise_logistic_gic2', 'RPLE_thres', 'RISE_thres', "logRISE_thres")) {
+  if (method %in% c('SLIDE', 'RPLE_thres', 'RISE_thres', "logRISE_thres")) {
     n_start <- 800
   } else if (method == "ELASSO_thres") {
     n_start <- 1800
@@ -143,9 +144,9 @@ for(type in type_list) {
       if (method == "ELASSO_thres") {
         n_increase_scale <- 4
       }
-      if (type == 10) {
+      if (type == 3) {
         n_temp <- n_temp + max(round(n_increase_scale * 65536 / (n_temp + 1)), 1)
-      } else if (type == 8) {
+      } else if (type == 1) {
         n_temp <- n_temp + max(round(n_increase_scale * 16384 / (n_temp + 1)), 1)
       }
       

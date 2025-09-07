@@ -3,25 +3,21 @@ compute_rate <- function(X.opt, sparse) {
   est_act <- which(X.opt != 0, arr.ind = TRUE)
   if(any(diag(X.opt) != 0)) {
     est_act <- est_act[-which(est_act[,1] == est_act[,2]),]
-    # est_act <- est_act[-which(est_act[,1] < est_act[,2]),]
   }
   est_act <- as.data.frame(est_act)
   true_act <- which(sparse != 0, arr.ind = TRUE)
   if(any(diag(sparse) != 0)) {
     true_act <- true_act[-which(true_act[,1] == true_act[,2]),]
-    # true_act <- true_act[-which(true_act[,1] < true_act[,2]),]
   }
   true_act <- as.data.frame(true_act)
   est_inact <- which(X.opt == 0, arr.ind = TRUE)
   if(any(diag(X.opt) == 0)) {
     est_inact <- est_inact[-which(est_inact[,1] == est_inact[,2]),]
-    # est_inact <- est_inact[-which(est_inact[,1] < est_inact[,2]),]
   }
   est_inact <- as.data.frame(est_inact)
   true_inact <- which(sparse == 0, arr.ind = TRUE)
   if(any(diag(sparse) == 0)) {
     true_inact <- true_inact[-which(true_inact[,1] == true_inact[,2]),]
-    # true_inact <- true_inact[-which(true_inact[,1] < true_inact[,2]),]
   }
   true_inact <- as.data.frame(true_inact)
   TP <- as.numeric(nrow(dplyr::intersect(est_act, true_act)))

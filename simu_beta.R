@@ -1,38 +1,41 @@
 rm(list = ls()); gc(reset = TRUE)
-args <- commandArgs(trailingOnly = TRUE)
+path <- "/Users/zhujin/splicing-ising/code-simulate/code-github"
+setwd(path)
+
 library(stringr)
 source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
 
-nrep <- 45
-isparallel <- TRUE
-ncore <- 5
-save <- FALSE
+args <- commandArgs(trailingOnly = TRUE)
 if (length(args) == 0) {
   # method <- c("RPLE_thres")
-  # method <- c("nodewise_logistic_gic2")
+  # method <- c("SLIDE")
   # method <- c("ELASSO_thres")
-  method <- c("LogRelax")
-  type_list <- c(12)
+  method <- c("SLIDE")
+  type_list <- c(1)
 } else {
-  method <- args[1]
-  type_list <- as.numeric(args[2])
+  method <- sub("^--method=", "", args[grep("^--method=", args)])
+  type_list <- as.numeric(sub("^--type=", "", args[grep("^--type=", args)]))
 }
+
+nrep <- 45
+isparallel <- TRUE
+ncore <- 45
+save <- FALSE
 
 p_list <- c(16)
 alpha_list <- c(0.4)
 degree_list <- c(3)
 
 n_start <- 1e2
-
 if (str_detect(method, "LogRelax")) {
   n_max <- 1e6
 } else {
   n_max <- 2e9
 }
 
-if (type_list == 8) {
+if (type_list == 1) {
   # Type B
   if (degree_list == 3) {
     beta_list <- (14:26)
@@ -41,20 +44,20 @@ if (type_list == 8) {
   } else if (degree_list == 6) {
     beta_list <- (16:32) / 2
   }
-} else if (type_list == 9) {
+} else if (type_list == 2) {
   # Type D
   if (degree_list == 3) {
     beta_list <- (20:32)
   } else {
     beta_list <- (20:36) / 2
   }
-} else if (type_list == 10) {
+} else if (type_list == 3) {
   # Type A
   beta_list <- (20:36) / 2
-} else if (type_list == 11) {
+} else if (type_list == 4) {
   # Type C
   beta_list <- (22:32)
-} else if (type_list == 12) {
+} else if (type_list == 5) {
   # Type E
   beta_list <- (20:36) / 2
 }
