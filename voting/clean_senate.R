@@ -1,7 +1,7 @@
 rm(list = ls()); gc(reset = TRUE)
 library(reshape2)
 
-path <- "~/voting"
+path <- "./voting"
 setwd(path)
 
 congress_study <- 106:117
