@@ -62,6 +62,7 @@ plot_data <- function(theta, dat, complete = FALSE) {
 }
 load("senate_nodewise.rda")
 load("senate_model_data.rda")
+congress_range <- 112:117
 index <- which(names(senate_nodewise) %in% as.character(congress_range))
 senate_nodewise <- senate_nodewise[index]
 senate_model_data <- senate_model_data[index]
@@ -83,7 +84,7 @@ pdat <- do.call("rbind.data.frame", pdat_list)
 nodesize <- 3
 set.seed(123)
 basic_pic <- ggplot2::ggplot(pdat, aes(x, y, xend = xend, yend = yend)) +
-  facet_wrap(congress ~ ., scales = "free", ncol = 2) + 
+  facet_wrap(congress ~ ., scales = "free", ncol = 3) + 
   ggnetwork::geom_edges(aes(size = connection_strength / max(connection_strength)), 
                         color="grey50", alpha = 0.3) +
   ggnetwork::geom_nodes(size = nodesize, 
@@ -114,24 +115,14 @@ democratic_in_republican <- subset(democratic_in_republican, x > median(x))
 democratic_in_republican <- subset(democratic_in_republican, y > median(y))
 democratic_in_republican <- unique(democratic_in_republican)
 democratic_in_republican <- subset(democratic_in_republican, color == "D")
-democratic_in_republican
 
 pic <- basic_pic +
   geom_nodetext_repel(
     aes(label = vertex.names), color = 'black', 
     data = function(x) {
-      x[x$vertex.names %in% c("FLAKE, Jeff", "HARRIS, Kamala Devi"), ]
-    }, vjust = -0.7, hjust = 1.0
-  )
-pic
-
-pic <- basic_pic +
-  geom_nodetext_repel(
-    aes(label = vertex.names), color = 'black', 
-    data = function(x) {
-      x[x$vertex.names == "FLAKE, Jeff" &
-          x$color == "R" &
-          x$congress == "115-th Congress (2017-2019)", ]
+      x[x$vertex.names == "GILLIBRAND, Kirsten" &
+          x$color == "D" &
+          x$congress == "116-th Congress (2019-2021)", ]
     },
     vjust = -0.7, hjust = 1.0
   ) + 
