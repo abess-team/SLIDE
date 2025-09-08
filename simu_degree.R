@@ -1,13 +1,15 @@
 rm(list = ls()); gc(reset = TRUE)
-args <- commandArgs(trailingOnly = TRUE)
-path <- "./"
-setwd(path)
+library(stringr)
+path <- here::here(); setwd(path)
 source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
+
 nrep <- 45
 isparallel <- TRUE
 ncore <- 45
+
+args <- commandArgs(trailingOnly = TRUE)
 save <- FALSE
 if (length(args) == 0) {
   method <- c("SLIDE")
@@ -59,7 +61,6 @@ if (isparallel && nrep > 1) {
   cl <- makeCluster(cl.cores)
   clusterExport(cl, ls())
   suppressMessages(clusterEvalQ(cl, expr = {
-    library(glmnet)
     library(ROI)
     library(abess)
   }))

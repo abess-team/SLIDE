@@ -1,6 +1,6 @@
 rm(list = ls()); gc(reset = TRUE)
-path <- "./"
-setwd(path)
+library(stringr)
+path <- here::here(); setwd(path)
 dir_name <- "result_high"
 if (!dir.exists(dir_name)) {
   dir.create(dir_name)
@@ -52,13 +52,12 @@ if (isparallel) {
   cl <- makeCluster(cl.cores)
   clusterExport(cl, ls())
   suppressMessages(clusterEvalQ(cl, expr = {
-    library(glmnet)
     library(ROI)
     library(abess)
     library(CVXR)
   }))
 } else {
-  library(glmnet)
+  
   library(ROI)
   library(abess)
 }

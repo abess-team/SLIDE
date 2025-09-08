@@ -1,6 +1,6 @@
 rm(list = ls()); gc(reset = TRUE)
-path <- "./"
-setwd(path)
+library(stringr)
+path <- here::here(); setwd(path)
 source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
@@ -60,7 +60,6 @@ if (isparallel && nrep > 1) {
   cl <- makeCluster(cl.cores)
   clusterExport(cl, ls())
   suppressMessages(clusterEvalQ(cl, expr = {
-    library(glmnet)
     library(ROI)
     library(abess)
   }))
