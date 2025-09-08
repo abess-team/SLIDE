@@ -1,6 +1,6 @@
 rm(list = ls()); gc(reset = TRUE)
-path <- "./"
-setwd(path)
+library(stringr)
+path <- here::here(); setwd(path)
 source("method_implementation.R")
 source("evaluation.R")
 source("simulation_main.R")
@@ -25,11 +25,7 @@ isparallel <- TRUE
 ncore <- 5
 save <- FALSE
 
-# code 里的n都是训练集大小 画图时要 * 2
 n_max <- 1e9
-
-# 除了type以外，一次只能跑一个维数 不然n_start出问题
-
 if (type_list %in% c(3)) {
   # 4NN
     p_list <- c(9, 16, 25, 36, 49, 64, 81, 100)
@@ -74,7 +70,6 @@ if (isparallel && nrep > 1) {
   cl <- makeCluster(cl.cores)
   clusterExport(cl, ls())
   suppressMessages(clusterEvalQ(cl, expr = {
-    library(glmnet)
     library(ROI)
     library(abess)
   }))
@@ -134,8 +129,6 @@ for(type in type_list) {
       
       if(prop == 1) {
         n_start_inner <- n_temp + 1
-        # n_start_inner <- round(n_temp * 0.4)
-        # n_start_inner <- n_temp
         print(paste0("Sufficient size for config ", info, " = ", n_temp))
         break
       } 
