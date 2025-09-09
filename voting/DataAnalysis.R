@@ -10,8 +10,8 @@ library(network)
 library(sna)
 library(ggpubr)
 
-congress_study <- 106:117
-year <- seq(2001, 2023, by = 2)
+congress_study <- 112:117
+year <- seq(2011, 2023, by = 2)
 
 senate_info <- read.csv("Sall_members.csv")
 senate_info <- senate_info[senate_info[["congress"]] %in% congress_study, ]
@@ -73,8 +73,7 @@ load("senate_model_data.rda")
 senate_nodewise <- lapply(senate_model_data, function(x) {
   dat <- t(x[["vote"]])
   splicing_gic_logistic <- slide(dat, weight = rep(1, nrow(dat)), 
-                                 tune.type = "gic", ic.scale = 1, 
-                                 graph.threshold = thres)
+                                 tune.type = "gic", ic.scale = 1)
   splicing_gic_logistic[[1]]
 })
 save(senate_nodewise, file = "senate_nodewise.rda")
@@ -115,12 +114,7 @@ plot_data <- function(theta, dat, complete = FALSE) {
   match_id <- match(vertex_name, dat$name)
   party <- dat$party[match_id]
   g %v% "color" <- as.character(party)
-  
-  if (congress == 116){
-    g %v% "text" <- ifelse(g %v% "vertex.names" %in% c("HARRIS, Kamala Devi", "GILLIBRAND, Kirsten"), g %v% "vertex.names", "")
-  } else {
-    g %v% "text" <- ""
-  }
+  g %v% "text" <- ""
   
   ggnetwork_default <- ggnetwork::ggnetwork(g, layout = "eigen")
   return(ggnetwork_default)
