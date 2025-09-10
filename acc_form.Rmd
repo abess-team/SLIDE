@@ -44,7 +44,7 @@ If box above is checked and if no simulated/synthetic data files are provided by
 Provide a short (< 100 words), high-level description of the data
 -->
 
-The datasets originate from the Voteview project, which tracks every congressional roll call vote in U.S. history. The datasets contain two files: `Sall_members.csv`providing background information on Senators, and `Sall_votes.csv`, recording roll call vote outcomes. While Voteview updates continuously as new votes occur, the version used here represents a snapshot at the time of download and may differ slightly from the most current data available.
+The datasets originate from the Voteview project, which tracks every congressional roll call vote in U.S. history. The datasets contain two files: `Sall_members.csv` providing background information on Senators, and `Sall_votes.csv` recording roll call vote outcomes. While Voteview updates continuously as new votes occur, the version used here represents a snapshot at the time of download and may differ slightly from the most current data available.
 
 
 ## Availability
@@ -97,9 +97,26 @@ Check all that apply
 A data dictionary provides information that allows users to understand the meaning, format, and use of the data.
 -->
 
-- [ ] Provided by authors in the following file(s): 
+- [x] Provided by authors in the following file(s): `Sall_votes.csv` and `Sall_members.csv`. 
 - [ ] Data file(s) is(are) self-describing (e.g., netCDF files)
-- [x] Available at the following URL: https://voteview.com/data. Following the steps to download proper data. First, set the options in the website. Specifically, set (i) `Data Type=Congressional Votes`, (ii) `Chamber=Senate Only`, (iii) `Congress=All`, and (iv) `File Format=CSV (Recommended)`. Second, click the `Download Data` botton to get the CSV file. 
+- [ ] Available at the following URL
+
+We provide the key components of the two datasets used in our analysis.  
+
+- `Sall_votes.csv`. A table with more than four million rows, each representing a voting record. The variables are:  
+  - **congress**: The number of the congressional session.  
+  - **icpsr**: A unique numeric identifier for each legislator.  
+  - **rollnumber**: A unique numeric identifier for each roll call vote.  
+  - **cast_code**: The recorded vote of the legislator (e.g., `1 = Yea`, `6 = Nay`, `9 = Present/Abstain`).  
+  - **chamber**: A binary variable with values `President` or `Senate`
+
+- `Sall_members.csv`. A table with nearly ten thousand rows, each representing a legislator. The variables are:  
+  - **congress**: The number of the congressional session.  
+  - **name**: The legislator’s full name.  
+  - **icpsr**: A unique numeric identifier for the legislator (consistent with `Sall_votes.csv`).  
+  - **party_code**: A numeric code representing the legislator’s political party.  
+  - **chamber**: A binary variable with values `President` or `Senate`
+
 
 ### Additional Information (optional)
 
@@ -188,7 +205,9 @@ sna, 2.7.1
 OPTIONAL: System/hardware requirements including operating system with version number, access to cluster, GPUs, etc.
 -->
 
-I conducted experiments on both MacOS and Linux platforms. So, the two platforms are recommended. 
+We conducted our experiments on a Linux platform, which we recommend for reproducibility. The system information is summarized below:
+
+> Ubuntu 22.04.1 LTS, Intel(R) Xeon(R) Platinum 8352V CPU @ 2.10GHz, Memory 251GB
 
 ### Parallelization used
 
@@ -235,7 +254,8 @@ The provided workflow reproduces:
 - `simu_high.R`: conduct experiments for high-dimensional cases. It is helpful for reproducing Figure 3 and Figure S2. 
 - `simu_p.R`: empirical sample complexity analysis on the dimension. It is essential for reproducing Figure S3.
 - `simu_ws.R`: empirical sample complexity analysis on the weakest signal. It reproduces Figure S4.
-- `batch.sh`: the shell script for various experiments
+- `batch.sh`: the shell script for various simulation
+- `DataAnalysis.R`: for real-world data analysis. It can reproduce Figure 4. 
 
 ### Location
 
@@ -277,7 +297,7 @@ chmod 777 batch.sh
 ./batch.sh
 ```
 
-Following `README.md` in the `voting` directory to get results in **real-world data analysis**. 
+Get results in **real-world data analysis** via conducting the R script `DataAnalysis.R`
 
 ### Expected run-time
 
