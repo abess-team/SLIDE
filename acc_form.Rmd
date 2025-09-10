@@ -173,6 +173,13 @@ parallel, 4.1.2
 stringr, 1.5.1
 here, 1.0.1
 pROC, 1.19.0.1
+reshape2, 1.4.4
+dplyr, 1.1.4
+ggnetwork, 0.5.12
+ggpubr, 0.6.0
+ggpmisc, 0.6.0
+network, 1.18.1
+sna, 2.7.1
 ```
 
 ### Supporting system/hardware requirements (optional)
