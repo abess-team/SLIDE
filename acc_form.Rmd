@@ -44,6 +44,9 @@ If box above is checked and if no simulated/synthetic data files are provided by
 Provide a short (< 100 words), high-level description of the data
 -->
 
+The datasets originate from the Voteview project, which tracks every congressional roll call vote in U.S. history. The datasets contain two files: `Sall_members.csv`providing background information on Senators, and `Sall_votes.csv`, recording roll call vote outcomes. While Voteview updates continuously as new votes occur, the version used here represents a snapshot at the time of download and may differ slightly from the most current data available.
+
+
 ## Availability
 
 
@@ -56,7 +59,7 @@ If the data are publicly available, see the *Publicly available data* section. O
 
 - [x] Data are available online at: [https://voteview.com/data](https://voteview.com/data)
 
-- [ ] Data are available as part of the paper's supplementary material.
+- [x] Data are available as part of the paper's supplementary material.
 
 - [ ] Data are publicly available by request, following the process described here:
 
@@ -112,7 +115,7 @@ OPTIONAL: Provide any additional details that would be helpful in understanding 
 Provide a short (< 100 words), high-level description of the code. If necessary, more details can be provided in files that accompany the code. If no code is provided, please state this and say why (e.g., if the paper contains no computational work).
 -->
 
-We provide the code in reproducing the empirical sample complexity analysis, high-dimensional cases, and real-world data analysis 
+We provide the code in reproducing the empirical sample complexity analysis, high-dimensional cases, and real-world data analysis. 
 
 ## Description
 
@@ -157,18 +160,19 @@ R version 4.1.2
 Include version numbers (e.g., version numbers for any R or Python packages used)
 -->
 
-The R packages used in our experiments are listed below
+The R packages used in our experiments are listed below:
 ```
-"Package" "Version"
-"numDeriv" "2016.8-1.1"
-"glmnet" "4.1-6"
-"ROI" "1.0-1"
-"CVXR" "1.0-15"
-"ECOSolveR" "0.5.5"
-"Matrix" "1.6-1"
-"foreach" "1.5.2"
-"parallel" "4.1.2"
-"stringr" "1.5.1"
+Package, Version
+numDeriv, 2016.8-1.1
+ROI, 1.0-1
+CVXR, 1.0-15
+ECOSolveR, 0.5.5
+Matrix, 1.6-1
+foreach, 1.5.2
+parallel, 4.1.2
+stringr, 1.5.1
+here, 1.0.1
+pROC, 1.19.0.1
 ```
 
 ### Supporting system/hardware requirements (optional)
