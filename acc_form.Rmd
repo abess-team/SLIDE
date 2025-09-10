@@ -254,8 +254,8 @@ The provided workflow reproduces:
 - `simu_high.R`: conduct experiments for high-dimensional cases. It is helpful for reproducing Figure 3 and Figure S2. 
 - `simu_p.R`: empirical sample complexity analysis on the dimension. It is essential for reproducing Figure S3.
 - `simu_ws.R`: empirical sample complexity analysis on the weakest signal. It reproduces Figure S4.
-- `batch.sh`: the shell script for various simulation
 - `DataAnalysis.R`: for real-world data analysis. It can reproduce Figure 4. 
+- `batch.sh`: the shell script for simulations in the paper
 
 ### Location
 
