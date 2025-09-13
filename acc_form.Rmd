@@ -44,7 +44,7 @@ If box above is checked and if no simulated/synthetic data files are provided by
 Provide a short (< 100 words), high-level description of the data
 -->
 
-The datasets originate from the Voteview project, which tracks every congressional roll call vote in U.S. history. The datasets contain two files: `Sall_members.csv` providing background information on Senators, and `Sall_votes.csv` recording roll call vote outcomes. While Voteview updates continuously as new votes occur, the version used here represents a snapshot at the time of download and may differ slightly from the most current data available.
+The datasets originate from the Voteview project, which tracks every congressional roll call vote in U.S. history. The datasets contain two files: (i) `Sall_members.csv`, containing background information on legislators such as names and party affiliations, and (ii) `Sall_votes.csv`, which records individual roll call vote outcomes. Together, the two data tables provide a resource for analyzing congressional voting behavior of legislators.
 
 
 ## Availability
@@ -117,6 +117,7 @@ We provide the key components of the two datasets used in our analysis.
   - **party_code**: A numeric code representing the legislator’s political party.  
   - **chamber**: A binary variable with values `President` or `Senate`
 
+Note that, since Voteview updates continuously as new votes occur, the version used here represents a snapshot at the time of download and may differ slightly from the most current data available.
 
 ### Additional Information (optional)
 
