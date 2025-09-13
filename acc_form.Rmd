@@ -250,12 +250,20 @@ The provided workflow reproduces:
 
 ## Workflow
 
+Below is the main scripts for numerical studies:
+
 - `simu_degree.R`: conduct experiments for empirical sample complexity analysis on the degree. It is essential for reproducing Figure 1 and Table S1.
+
 - `simu_beta.R`: conduct experiments for empirical sample complexity analysis on the "maximum" signal. It reproduces Figure 2 and Figure S1.
+
 - `simu_high.R`: conduct experiments for high-dimensional cases. It is helpful for reproducing Figure 3 and Figure S2. 
+
 - `simu_p.R`: empirical sample complexity analysis on the dimension. It is essential for reproducing Figure S3.
+
 - `simu_ws.R`: empirical sample complexity analysis on the weakest signal. It reproduces Figure S4.
-- `DataAnalysis.R`: for real-world data analysis. It can reproduce Figure 4. 
+
+- `DataAnalysis.R` for real-data analysis, including data cleaning, estimation of the graphical structure among senators, and visualization.
+
 - `batch.sh`: the shell script for simulations in the paper
 
 ### Location
