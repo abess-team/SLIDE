@@ -1,9 +1,0 @@
-"","n_1674","n_1713"
-"nodewise_logistic_gic2.TPR",1,1
-"nodewise_logistic_gic2.FPR",4.67836257309942e-06,0
-"nodewise_logistic_gic2.MCC",0.99994231843551,1
-"nodewise_logistic_gic2.loss_op",0.112372530153577,0.111233199860033
-"nodewise_logistic_gic2.loss_l1",0.177495888336447,0.175891703139752
-"nodewise_logistic_gic2.loss_F",0.523037176331522,0.514324654388916
-"nodewise_logistic_gic2.prop",0.977777777777778,1
-"nodewise_logistic_gic2.mse",2.72038402212778e-05,2.6247505971831e-05
